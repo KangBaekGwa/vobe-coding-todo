@@ -1,0 +1,28 @@
+version: 2
+
+updates:
+  - package-ecosystem: "gradle"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+
+    # 동시에 열리는 PR 개수 제한
+#    open-pull-requests-limit: 5
+
+    # 메이저 업데이트 제외
+    ignore:
+      - dependency-name: "*"
+        update-types:
+          - "version-update:semver-major"
+
+      # 특정 패키지 제외
+#      - dependency-name: "org.projectlombok:lombok"
+#      - dependency-name: "com.querydsl:querydsl-jpa"
+
+    # PR 라벨 자동 지정
+    labels:
+      - "dependencies"
+      - "dependabot"
+
+    # PR을 특정 브랜치 대상으로
+    target-branch: "main"
