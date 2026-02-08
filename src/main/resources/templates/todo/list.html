@@ -8,6 +8,8 @@
     <!-- CSS files -->
     <link href="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta20/dist/css/tabler.min.css" rel="stylesheet"/>
     <link href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/tabler-icons.min.css" rel="stylesheet">
+    <!-- jQuery CDN 추가 -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 </head>
 <body>
 <div class="page">
@@ -27,6 +29,14 @@
                             </div>
                             <div class="table-responsive">
                                 <table class="table card-table table-vcenter">
+                                    <thead class="visually-hidden">
+                                        <tr>
+                                            <th class="w-1"></th>
+                                            <th>할 일</th>
+                                            <th>마감일</th>
+                                            <th class="w-1"></th>
+                                        </tr>
+                                    </thead>
                                     <tbody>
                                     <tr th:each="todo : ${todayTodos}">
                                         <td class="w-1">
@@ -40,6 +50,12 @@
                                             <span th:text="${todo.content}"
                                                   th:classappend="${todo.isCompleted} ? 'text-muted text-decoration-line-through' : ''">
                                                 Todo 내용
+                                            </span>
+                                        </td>
+                                        <td class="text-muted">
+                                            <span th:if="${todo.deadline}"
+                                                  th:text="${#temporals.format(todo.deadline, 'MM-dd')}"
+                                                  class="badge bg-blue-lt">
                                             </span>
                                         </td>
                                         <td class="text-end w-1">
@@ -59,6 +75,8 @@
                         <div class="card">
                             <div class="card-header">
                                 <h3 class="card-title">My Todo List</h3>
+                                <!-- 시계 영역 개선: monospace 폰트 적용 -->
+                                <div class="ms-auto text-muted" id="live-clock" style="font-family: monospace; font-size: 0.95rem;"></div>
                             </div>
                             <div class="card-body">
                                 <form th:action="@{/todos}" method="post" class="mb-4">
@@ -127,5 +145,34 @@
         </div>
     </div>
 </div>
+
+<script>
+    function updateClock() {
+        const now = new Date();
+        // 날짜 포맷 (예: 2023. 10. 25. (수))
+        const dateString = now.toLocaleDateString('ko-KR', {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            weekday: 'short'
+        });
+        // 시간 포맷 (예: 14:30:45)
+        const timeString = now.toLocaleTimeString('ko-KR', {
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            hour12: false
+        });
+
+        $('#live-clock').text(`${dateString} ${timeString}`);
+    }
+
+    // 1초마다 실행
+    setInterval(updateClock, 1000);
+
+    $(document).ready(function() {
+        updateClock(); // 로딩 직후 즉시 실행
+    });
+</script>
 </body>
 </html>
