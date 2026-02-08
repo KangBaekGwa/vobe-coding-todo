@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <title>Todo List - Tabler</title>
+    <!-- CSS files -->
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta20/dist/css/tabler.min.css" rel="stylesheet"/>
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/tabler-icons.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="page">
+    <div class="page-wrapper">
+        <div class="page-body">
+            <div class="container-xl">
+                <div class="row justify-content-center">
+                    <div class="col-lg-8">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">My Todo List</h3>
+                            </div>
+                            <div class="card-body">
+                                <form th:action="@{/todos}" method="post" class="mb-4">
+                                    <div class="input-group">
+                                        <input type="text" name="content" class="form-control" placeholder="새로운 할 일을 입력하세요..." required>
+                                        <button type="submit" class="btn btn-primary">
+                                            <i class="ti ti-plus"></i>
+                                            추가
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table card-table table-vcenter datatable">
+                                    <thead>
+                                        <tr>
+                                            <th class="w-1"></th>
+                                            <th>할 일</th>
+                                            <th>생성 시간</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="todo : ${todos}">
+                                        <td>
+                                            <form th:action="@{/todos/{id}/toggle(id=${todo.id})}" method="post" class="d-inline">
+                                                <input type="checkbox" class="form-check-input"
+                                                       th:checked="${todo.isCompleted}"
+                                                       onchange="this.form.submit()">
+                                            </form>
+                                        </td>
+                                        <td class="text-truncate" style="max-width: 250px;">
+                                            <span th:text="${todo.content}"
+                                                  th:title="${todo.content}"
+                                                  th:classappend="${todo.isCompleted} ? 'text-muted' : ''">
+                                                Todo 내용
+                                            </span>
+                                        </td>
+                                        <td class="text-muted" th:text="${#temporals.format(todo.createdAt, 'MM월 dd일 HH:mm')}">
+                                            생성일
+                                        </td>
+                                        <td class="text-end">
+                                            <form th:action="@{/todos/{id}/delete(id=${todo.id})}" method="post" class="d-inline">
+                                                <button type="submit" class="btn btn-ghost btn-sm text-danger">
+                                                    <i class="ti ti-trash"></i>
+                                                    삭제
+                                                </button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
