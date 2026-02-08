@@ -16,6 +16,46 @@
             <div class="container-xl">
                 <div class="row justify-content-center">
                     <div class="col-lg-8">
+
+                        <!-- 오늘 해야할 일 섹션 -->
+                        <div class="card mb-4" th:if="${not #lists.isEmpty(todayTodos)}">
+                            <div class="card-header bg-primary-lt">
+                                <h3 class="card-title text-primary">
+                                    <i class="ti ti-calendar-event me-2"></i>
+                                    오늘 해야할 일
+                                </h3>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table card-table table-vcenter">
+                                    <tbody>
+                                    <tr th:each="todo : ${todayTodos}">
+                                        <td class="w-1">
+                                            <form th:action="@{/todos/{id}/toggle(id=${todo.id})}" method="post" class="d-inline">
+                                                <input type="checkbox" class="form-check-input"
+                                                       th:checked="${todo.isCompleted}"
+                                                       onchange="this.form.submit()">
+                                            </form>
+                                        </td>
+                                        <td class="text-truncate">
+                                            <span th:text="${todo.content}"
+                                                  th:classappend="${todo.isCompleted} ? 'text-muted text-decoration-line-through' : ''">
+                                                Todo 내용
+                                            </span>
+                                        </td>
+                                        <td class="text-end w-1">
+                                            <form th:action="@{/todos/{id}/delete(id=${todo.id})}" method="post" class="d-inline">
+                                                <button type="submit" class="btn btn-ghost btn-icon btn-sm text-danger" title="삭제">
+                                                    <i class="ti ti-trash"></i>
+                                                </button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- 전체 할 일 목록 -->
                         <div class="card">
                             <div class="card-header">
                                 <h3 class="card-title">My Todo List</h3>
@@ -24,6 +64,7 @@
                                 <form th:action="@{/todos}" method="post" class="mb-4">
                                     <div class="input-group">
                                         <input type="text" name="content" class="form-control" placeholder="새로운 할 일을 입력하세요..." required>
+                                        <input type="date" name="deadline" class="form-control" style="max-width: 160px;" title="마감일 설정">
                                         <button type="submit" class="btn btn-primary">
                                             <i class="ti ti-plus"></i>
                                             추가
@@ -37,6 +78,7 @@
                                         <tr>
                                             <th class="w-1"></th>
                                             <th>할 일</th>
+                                            <th>마감일</th>
                                             <th>생성 시간</th>
                                             <th></th>
                                         </tr>
@@ -53,8 +95,14 @@
                                         <td class="text-truncate" style="max-width: 250px;">
                                             <span th:text="${todo.content}"
                                                   th:title="${todo.content}"
-                                                  th:classappend="${todo.isCompleted} ? 'text-muted' : ''">
+                                                  th:classappend="${todo.isCompleted} ? 'text-muted text-decoration-line-through' : ''">
                                                 Todo 내용
+                                            </span>
+                                        </td>
+                                        <td class="text-muted">
+                                            <span th:if="${todo.deadline}"
+                                                  th:text="${#temporals.format(todo.deadline, 'MM-dd')}"
+                                                  class="badge bg-blue-lt">
                                             </span>
                                         </td>
                                         <td class="text-muted" th:text="${#temporals.format(todo.createdAt, 'MM월 dd일 HH:mm')}">
