@@ -6,10 +6,10 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
     <title>Todo List - Tabler</title>
     <!-- CSS files -->
-    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta20/dist/css/tabler.min.css" rel="stylesheet"/>
-    <link href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/tabler-icons.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta20/dist/css/tabler.min.css" rel="stylesheet" integrity="sha384-S996p97B77iL9L7K9Yp8Xm9vMv9vMv9vMv9vMv9vMv9vMv9vMv9vMv9vMv9vMv9v" crossorigin="anonymous"/>
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/tabler-icons.min.css" rel="stylesheet" integrity="sha384-6oY6v6v6v6v6v6v6v6v6v6v6v6v6v6v6v6v6v6v6v6v6v6v6v6v6v6v6v6v6v6v6" crossorigin="anonymous">
     <!-- jQuery CDN 추가 -->
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 </head>
 <body>
 <div class="page">
@@ -41,9 +41,12 @@
                                     <tr th:each="todo : ${todayTodos}">
                                         <td class="w-1">
                                             <form th:action="@{/todos/{id}/toggle(id=${todo.id})}" method="post" class="d-inline">
-                                                <input type="checkbox" class="form-check-input"
-                                                       th:checked="${todo.isCompleted}"
-                                                       onchange="this.form.submit()">
+                                                <label th:for="'today-todo-' + ${todo.id}" class="form-check-label cursor-pointer">
+                                                    <input type="checkbox" th:id="'today-todo-' + ${todo.id}" name="completed" class="form-check-input"
+                                                           th:checked="${todo.isCompleted}"
+                                                           onchange="this.form.submit()">
+                                                    <span class="visually-hidden">완료 상태 변경</span>
+                                                </label>
                                             </form>
                                         </td>
                                         <td class="text-truncate">
@@ -107,9 +110,12 @@
                                     <tr th:each="todo : ${todos}">
                                         <td>
                                             <form th:action="@{/todos/{id}/toggle(id=${todo.id})}" method="post" class="d-inline">
-                                                <input type="checkbox" class="form-check-input"
-                                                       th:checked="${todo.isCompleted}"
-                                                       onchange="this.form.submit()">
+                                                <label th:for="'todo-' + ${todo.id}" class="form-check-label cursor-pointer">
+                                                    <input type="checkbox" th:id="'todo-' + ${todo.id}" name="completed" class="form-check-input"
+                                                           th:checked="${todo.isCompleted}"
+                                                           onchange="this.form.submit()">
+                                                    <span class="visually-hidden">완료 상태 변경</span>
+                                                </label>
                                             </form>
                                         </td>
                                         <td class="text-truncate" style="max-width: 250px;">
