@@ -81,8 +81,10 @@
                             <div class="card-body">
                                 <form th:action="@{/todos}" method="post" class="mb-4">
                                     <div class="input-group">
-                                        <input type="text" name="content" class="form-control" placeholder="새로운 할 일을 입력하세요..." required>
-                                        <input type="date" name="deadline" class="form-control" style="max-width: 160px;" title="마감일 설정">
+                                        <label class="visually-hidden" for="todo-content">할 일 내용</label>
+                                        <input type="text" id="todo-content" name="content" class="form-control" placeholder="새로운 할 일을 입력하세요..." required>
+                                        <label class="visually-hidden" for="todo-deadline">마감일</label>
+                                        <input type="date" id="todo-deadline" name="deadline" class="form-control" style="max-width: 160px;" title="마감일 설정">
                                         <button type="submit" class="btn btn-primary">
                                             <i class="ti ti-plus"></i>
                                             추가
