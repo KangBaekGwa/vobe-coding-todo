@@ -7,6 +7,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import java.time.LocalDate;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,16 +28,32 @@ public class TodoEntity extends TemporalEntity {
     @Column(nullable = false)
     private Boolean isCompleted;
 
-    private TodoEntity(String content) {
+    @Column(name = "deadline")
+    private LocalDate deadline;
+
+    private TodoEntity(String content, LocalDate deadline) {
         this.content = content;
         this.isCompleted = false;
+        this.deadline = deadline;
+    }
+
+    public static TodoEntity of(String content, LocalDate deadline) {
+        return new TodoEntity(content, deadline);
     }
 
     public static TodoEntity of(String content) {
-        return new TodoEntity(content);
+        return new TodoEntity(content, null);
     }
 
     public void toggleCompletion() {
         this.isCompleted = !this.isCompleted;
+    }
+
+    public void changeDeadline(LocalDate deadline) {
+        this.deadline = deadline;
+    }
+
+    public boolean isDue(LocalDate date) {
+        return deadline != null && deadline.isEqual(date);
     }
 }

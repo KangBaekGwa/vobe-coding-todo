@@ -1,7 +1,9 @@
 package com.baekgwa.vibecodingtodolist.domain.todo.controller;
 
 import com.baekgwa.vibecodingtodolist.domain.todo.service.TodoService;
+import java.time.LocalDate;
 import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,12 +20,16 @@ public class TodoController {
     @GetMapping("/")
     public String getTodos(Model model) {
         model.addAttribute("todos", todoService.getTodos());
+        model.addAttribute("todayTodos", todoService.getTodayTodos());
         return "todo/list";
     }
 
     @PostMapping("/todos")
-    public String addTodo(@RequestParam String content) {
-        todoService.addTodo(content);
+    public String addTodo(
+        @RequestParam String content,
+        @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate deadline
+    ) {
+        todoService.addTodo(content, deadline);
         return "redirect:/";
     }
 
